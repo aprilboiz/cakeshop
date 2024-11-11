@@ -1,4 +1,4 @@
-package com.swtest.cakeshop.jwt;
+package com.swtest.cakeshop.auth.jwt;
 
 import com.swtest.cakeshop.exception.AccessDeniedException;
 import io.jsonwebtoken.Claims;

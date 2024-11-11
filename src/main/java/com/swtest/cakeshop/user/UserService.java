@@ -2,6 +2,9 @@ package com.swtest.cakeshop.user;
 
 import com.swtest.cakeshop.auth.dto.RegisterRequest;
 import com.swtest.cakeshop.exception.DuplicateException;
+import com.swtest.cakeshop.person.Person;
+import com.swtest.cakeshop.person.PersonRepository;
+import com.swtest.cakeshop.person.PersonService;
 import com.swtest.cakeshop.role.Role;
 import com.swtest.cakeshop.role.RoleService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,11 +24,13 @@ import java.util.Set;
 @Service
 @Transactional
 public class UserService implements UserDetailsService {
+    private final PersonRepository personRepository;
     private final RoleService roleService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public UserService(UserRepository userRepository, RoleService roleService) {
+    public UserService(PersonRepository personRepository, UserRepository userRepository, RoleService roleService) {
+        this.personRepository = personRepository;
         this.userRepository = userRepository;
         this.roleService = roleService;
     }
@@ -47,7 +52,7 @@ public class UserService implements UserDetailsService {
 
     public User findByUsername(String username){
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User with username '%s' not found", username)));
     }
 
     public List<User> findAll(){
@@ -55,6 +60,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void register(RegisterRequest request){
+        // Check if the username already exists
         String userName = request.username();
         Optional<User> existingUser = userRepository.findByUsername(userName);
         if (existingUser.isPresent()){
@@ -62,10 +68,20 @@ public class UserService implements UserDetailsService {
         }
         String hashedPassword = passwordEncoder.encode(request.password());
         Set<Role> userRoles = new HashSet<>();
-        for (String roleName : request.roles()){
-            userRoles.add(roleService.findByName(roleName));
-        }
-        User user = new User(userName, hashedPassword, userRoles);
+        userRoles.add(roleService.findByName("USER"));
+
+        Person newPerson = new Person();
+        newPerson.setName(request.name());
+        newPerson.setEmail(request.email());
+        newPerson.setPhoneNumber(request.phoneNumber());
+        newPerson.setAddress(request.address());
+        personRepository.save(newPerson);
+
+        User user = new User();
+        user.setUsername(userName);
+        user.setPassword(hashedPassword);
+        user.setRoles(userRoles);
+        user.setPerson(newPerson);
         userRepository.save(user);
     }
 

@@ -1,5 +1,6 @@
 package com.swtest.cakeshop.user;
 
+import com.swtest.cakeshop.order.Order;
 import com.swtest.cakeshop.person.Person;
 import com.swtest.cakeshop.role.Role;
 import jakarta.persistence.*;
@@ -28,7 +29,6 @@ public class User {
     @JoinColumn(name = "person_id")
     private Person person;
 
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
@@ -36,6 +36,9 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Order> orders;
 
     public User(String username, String password, Set<Role> roles) {
         this.username = username;

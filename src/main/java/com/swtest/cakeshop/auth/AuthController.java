@@ -3,7 +3,7 @@ package com.swtest.cakeshop.auth;
 import com.swtest.cakeshop.auth.dto.LoginRequest;
 import com.swtest.cakeshop.auth.dto.LoginResponse;
 import com.swtest.cakeshop.auth.dto.RegisterRequest;
-import com.swtest.cakeshop.jwt.JwtHelper;
+import com.swtest.cakeshop.auth.jwt.JwtHelper;
 import com.swtest.cakeshop.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -37,7 +37,6 @@ public class AuthController {
     @Operation(summary = "Register a new user", tags = {"Auth"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User registered successfully"),
-            @ApiResponse(responseCode = "404", description = "Role is not found"),
             @ApiResponse(responseCode = "409", description = "Username already exists")
     })
     @PostMapping("/register")

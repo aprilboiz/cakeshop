@@ -22,7 +22,7 @@ public class Person {
     private String phoneNumber;
     private String address;
 
-    @OneToOne(mappedBy = "person", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "person")
     private User user;
 
     public Person(String name, String email, String phoneNumber, String address) {
@@ -37,8 +37,8 @@ public class Person {
             this.id,
             this.name,
             this.email,
-            this.phoneNumber,
-            this.address
+            this.address,
+            this.phoneNumber
         );
     }
 }

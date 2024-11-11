@@ -30,7 +30,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "User information found", content = @Content(schema = @Schema(implementation = PersonResponse.class))),
             @ApiResponse(responseCode = "404", description = "User information not found", content = @Content)
     })
-    @GetMapping("/get_info")
+    @GetMapping("/info")
     public ResponseEntity<PersonResponse> getUserInfo() {
         return ResponseEntity.ok(personService.findPersonByUser(userService.getCurrentUser()).toDTO());
     }
@@ -40,7 +40,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "User information found", content = @Content(schema = @Schema(implementation = PersonResponse.class))),
             @ApiResponse(responseCode = "404", description = "User information not found", content = @Content)
     })
-    @GetMapping("/get_info/{username}")
+    @GetMapping("/info/{username}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PersonResponse> getUserInfo(@PathVariable String username) {
         User user = userService.findByUsername(username);

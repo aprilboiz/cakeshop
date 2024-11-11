@@ -17,7 +17,7 @@ public class CategoryService {
 
     public void createCategory(CategoryRequest request){
         String categoryName = request.name();
-        Optional<Category> existCategory = this.categoryRepository.findByName(categoryName);
+        Optional<Category> existCategory = this.categoryRepository.findByNameIgnoreCase(categoryName);
         if (existCategory.isPresent()) {
             throw new DuplicateException(String.format("This category '%s' already exists", existCategory));
         }
@@ -27,7 +27,7 @@ public class CategoryService {
 
     public Category findCategoryByName(String name){
         return categoryRepository
-                .findByName(name)
-                .orElseThrow(() -> new NotFoundException(String.format("Category %s is not found", name)));
+                .findByNameIgnoreCase(name)
+                .orElseThrow(() -> new NotFoundException(String.format("Category '%s' is not found", name)));
     }
 }

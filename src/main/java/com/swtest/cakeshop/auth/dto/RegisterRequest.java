@@ -1,5 +1,6 @@
 package com.swtest.cakeshop.auth.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -11,11 +12,20 @@ public record RegisterRequest(
         String username,
 
         @NotEmpty(message = "Password is required")
-        @Min(value = 8, message = "Password must be at least 8 characters long")
+        @Size(min = 8, message = "Password must be at least 8 characters long")
         String password,
 
-        @NotEmpty(message = "Role is required")
-        @Size(min = 1, message = "At least one role is required")
-        Set<String> roles
+        @NotEmpty(message = "Full name is required")
+        String name,
 
+        @NotEmpty(message = "Email is required")
+        @Email(message = "Email is invalid")
+        String email,
+
+        @NotEmpty(message = "Phone number is required")
+        @Size(min = 10, max = 10, message = "Phone number must be 10 digits long")
+        String phoneNumber,
+
+        @NotEmpty(message = "Address is required")
+        String address
 ) {}

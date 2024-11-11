@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Exludes the following files
+src/main/resources/cloudinary.properties

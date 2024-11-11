@@ -2,6 +2,8 @@ package com.swtest.cakeshop.product.category;
 
 import com.swtest.cakeshop.product.category.dto.CategoryRequest;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +22,6 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<Void> createCategory(@Valid @RequestBody CategoryRequest request){
         categoryService.createCategory(request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
