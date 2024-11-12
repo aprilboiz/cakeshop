@@ -1,10 +1,12 @@
 services:
-#  cake_shop:
-#    build: .
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - db
+  cake_shop:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+        - cake_shop-network
   db:
     image: postgres
     environment:
@@ -12,3 +14,7 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
+    networks:
+        - cake_shop-network
+networks:
+  cake_shop-network:

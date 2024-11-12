@@ -16,7 +16,7 @@ spring:
   #  Database configuration
   #  For PostgreSQL
   datasource:
-    url: jdbc:postgresql://localhost:5432/cake_shop
+    url: jdbc:postgresql://db:5432/cake_shop
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
