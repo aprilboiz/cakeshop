@@ -65,8 +65,10 @@ public class OrderServiceImpl implements OrderService{
         Payment orderPayment = new Payment();
         orderPayment.setAmount(order.getTotal());
         orderPayment.setStatus(PaymentStatus.PENDING);
-        orderPayment.setMethod(PaymentMethod.valueOf(orderRequest.paymentMethod()));
+        orderPayment.setMethod(PaymentMethod.valueOf(orderRequest.paymentMethod().toUpperCase()));
         paymentRepository.save(orderPayment);
+
+        order.setPayment(orderPayment);
 
         return orderRepository.save(order).toDTO();
     }
