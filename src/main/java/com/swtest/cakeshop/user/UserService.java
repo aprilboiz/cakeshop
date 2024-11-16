@@ -2,9 +2,8 @@ package com.swtest.cakeshop.user;
 
 import com.swtest.cakeshop.auth.dto.RegisterRequest;
 import com.swtest.cakeshop.exception.DuplicateException;
-import com.swtest.cakeshop.person.Person;
-import com.swtest.cakeshop.person.PersonRepository;
-import com.swtest.cakeshop.person.PersonService;
+import com.swtest.cakeshop.user.person.Person;
+import com.swtest.cakeshop.user.person.PersonRepository;
 import com.swtest.cakeshop.role.Role;
 import com.swtest.cakeshop.role.RoleService;
 import org.springframework.security.core.context.SecurityContextHolder;
