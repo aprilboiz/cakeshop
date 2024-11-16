@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidPaymentMethod {
     boolean nullable() default false;
-    String message() default "Invalid payment method";
+    String message() default "Invalid payment method: {value}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

@@ -24,8 +24,11 @@ public class PaymentMethodValidator implements ConstraintValidator<ValidPaymentM
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(message)
-                    .addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(
+                    message
+                    .replace("{value}", value)
+                    )
+            .addConstraintViolation();
         }
 
         return isValid;
