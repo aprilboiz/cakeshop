@@ -36,8 +36,8 @@ public class AuthController {
 
     @Operation(summary = "Register a new user", tags = {"Auth"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "User registered successfully"),
-            @ApiResponse(responseCode = "409", description = "Username already exists")
+            @ApiResponse(responseCode = "201", description = "User registered successfully", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Username already exists", content = @Content)
     })
     @PostMapping("/register")
     public ResponseEntity<Void> signup(@Valid @RequestBody RegisterRequest request){
