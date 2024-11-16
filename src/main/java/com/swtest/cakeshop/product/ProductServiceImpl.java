@@ -37,7 +37,11 @@ public class ProductServiceImpl implements ProductService {
         String productName = request.name();
         Optional<Product> existingProduct = productRepository.findByName(productName);
         if (existingProduct.isPresent()) {
-            throw new DuplicateException(String.format("This product '%s' already exists", existingProduct));
+            throw new DuplicateException(String.format(
+                    "This product '%s' already exists with id %d",
+                    existingProduct.get().getName(),
+                    existingProduct.get().getId())
+            );
         }
         Category productCategory = categoryService.findCategoryByName(request.category());
         List<String> imagePaths = new ArrayList<>();
