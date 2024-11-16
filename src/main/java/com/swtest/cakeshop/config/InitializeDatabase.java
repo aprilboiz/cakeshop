@@ -1,7 +1,7 @@
 package com.swtest.cakeshop.config;
 
-import com.swtest.cakeshop.person.Person;
-import com.swtest.cakeshop.person.PersonRepository;
+import com.swtest.cakeshop.user.person.Person;
+import com.swtest.cakeshop.user.person.PersonRepository;
 import com.swtest.cakeshop.product.category.Category;
 import com.swtest.cakeshop.product.category.CategoryRepository;
 import com.swtest.cakeshop.role.Role;
