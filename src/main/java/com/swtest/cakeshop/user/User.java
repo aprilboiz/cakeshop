@@ -1,7 +1,7 @@
 package com.swtest.cakeshop.user;
 
 import com.swtest.cakeshop.order.Order;
-import com.swtest.cakeshop.person.Person;
+import com.swtest.cakeshop.user.person.Person;
 import com.swtest.cakeshop.role.Role;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -25,7 +25,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id")
     private Person person;
 
