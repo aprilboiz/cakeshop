@@ -710,7 +710,7 @@ INSERT INTO public.user_role (role_id, user_id) VALUES (1, 3);
 -- Name: categories_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.categories_seq', 4, false);
+SELECT pg_catalog.setval('public.categories_seq', 4, true);
 
 
 --
@@ -745,14 +745,14 @@ SELECT pg_catalog.setval('public.person_seq', 1, true);
 -- Name: products_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.products_seq', 310, false);
+SELECT pg_catalog.setval('public.products_seq', 310, true);
 
 
 --
 -- Name: roles_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.roles_seq', 2, false);
+SELECT pg_catalog.setval('public.roles_seq', 2, true);
 
 
 --
