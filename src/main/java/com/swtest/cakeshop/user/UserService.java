@@ -105,7 +105,7 @@ public class UserService implements UserDetailsService {
     public String createNewPassword(String username){
         User user = findByUsername(username);
         String newPassword = passwordService.generatePassword(10);
-        user.setPassword(newPassword);
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
         return newPassword;
     }
