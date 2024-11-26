@@ -3,6 +3,8 @@ package com.swtest.cakeshop.order;
 import com.swtest.cakeshop.order.dto.OrderRequest;
 import com.swtest.cakeshop.order.dto.OrderResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -40,6 +43,9 @@ public class OrderController {
     }
 
     @Operation(summary = "Get all orders", tags = {"Order"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get successfully", content = @Content(schema = @Schema(implementation = PagedModel.class, subTypes = OrderResponse.class))),
+    })
     @GetMapping
     public ResponseEntity<Page<OrderResponse>> getOrders(Pageable pageable){
         PageRequest pageRequest = PageRequest.of(
