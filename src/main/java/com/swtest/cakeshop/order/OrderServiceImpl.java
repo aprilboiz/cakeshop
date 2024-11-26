@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService{
@@ -75,7 +76,14 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public Page<OrderResponse> getOrders(PageRequest pageRequest){
-        Page<Order> orders = orderRepository.findAllByUser(userService.getCurrentUser(), pageRequest);
+        User currentUser = userService.getCurrentUser();
+        Page<Order> orders;
+
+        if (currentUser.getRoles().stream().anyMatch(role -> "ADMIN".equals(role.getName()))) {
+            orders = orderRepository.findAll(pageRequest);
+        }else {
+            orders = orderRepository.findAllByUser(currentUser, pageRequest);
+        }
 
         List<OrderResponse> orderResponses = orders.stream()
                 .map(Order::toDTO)
@@ -120,10 +128,16 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public OrderResponse getOrder(Long orderId){
-        Order order = orderRepository.findByIdAndUser(orderId, userService.getCurrentUser())
-                .orElseThrow(() -> new NotFoundException(String.format("Order with id '%d' not found", orderId)));
+        Optional<Order> order;
+        User currentUser = userService.getCurrentUser();
 
-        return order.toDTO();
+        if (currentUser.getRoles().stream().anyMatch(role -> "ADMIN".equals(role.getName()))) {
+            order = orderRepository.findById(orderId);
+        }else{
+            order = orderRepository.findByIdAndUser(orderId, userService.getCurrentUser());
+        }
+
+        return order.orElseThrow(() -> new NotFoundException(String.format("Order with id '%d' not found", orderId))).toDTO();
     }
 
     @Override

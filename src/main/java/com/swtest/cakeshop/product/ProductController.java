@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -35,6 +36,7 @@ public class ProductController {
             @ApiResponse(responseCode = "500", description = "Error saving product")
     })
     @PostMapping(consumes = "multipart/form-data")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> createProduct(@Valid @ModelAttribute ProductRequest product, UriComponentsBuilder ucb){
         try {
             ProductResponse createdProduct = productService.createProduct(product);
@@ -79,6 +81,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProductById(@PathVariable Long id){
         productService.deleteProductById(id);
         return ResponseEntity.noContent().build();
@@ -90,6 +93,7 @@ public class ProductController {
             @ApiResponse(responseCode = "500", description = "Error saving product")
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> updateOrCreateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequest product){
         try {
             productService.updateProduct(id, product);
