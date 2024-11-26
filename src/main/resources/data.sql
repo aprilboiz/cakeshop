@@ -693,9 +693,9 @@ INSERT INTO public.roles (role_id, role_name) VALUES (2, 'ADMIN');
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.users (person_id, user_id, password, username) VALUES (NULL, 1, '$2a$10$.jXS4MJ32AVFNf3FEo/GDeWKmlhv49Ro8.uHCgMf8DFfTn5s8Na4q', 'admin');
-INSERT INTO public.users (person_id, user_id, password, username) VALUES (NULL, 2, '$2a$10$k1dJCmMitqz01tH2gvkDNOWdscf8WzMEnA7CRKFgmfBei0XCZLbau', 'tuananh');
-INSERT INTO public.users (person_id, user_id, password, username) VALUES (1, 3, '$2a$10$byRdJVVCa/R.sz0zKm6Bgu98RIxzsKmgYrenFPpA6rxrcUV4TJ9U6', 'tuananh1');
+INSERT INTO public.users VALUES ('2024-11-26 17:33:15.852346+00', NULL, 1, '$2a$10$TosjOzFrFaGF2ZPY.hKIsuNYqr9lcx/Z/fsi7la5USEurykFhiqh6', 'admin');
+INSERT INTO public.users VALUES ('2024-11-26 17:33:15.889755+00', NULL, 2, '$2a$10$28nfAQGtxGqNmXzLIzCuBuGbgrev2ZXpY72u47PM8X.iKBctCK27.', 'tuananh');
+INSERT INTO public.users VALUES ('2024-11-26 17:33:15.99405+00', 1, 3, '$2a$10$dNoyTvZDFkPUB36NSDwfOemg3eGSdAbBmFRYLyQXkzKdY2.5ww1xu', 'tuananh1');
 
 --
 -- Data for Name: user_role; Type: TABLE DATA; Schema: public; Owner: postgres
