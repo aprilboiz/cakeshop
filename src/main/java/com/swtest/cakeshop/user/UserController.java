@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -66,13 +67,17 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "The user with that username was not found")
     })
     @PostMapping("/forgot")
-    public ResponseEntity<String> forgetPassword(@RequestBody Map<String, String> payload) {
+    public ResponseEntity<Map<String, String>> forgetPassword(@RequestBody Map<String, String> payload) {
         String username = payload.get("username");
+        Map<String, String> return_msg = new HashMap<>();
         if (username == null || username.isEmpty()) {
-            return ResponseEntity.badRequest().body("Username is required");
+            return_msg.put("error", "Username is required");
+            return ResponseEntity.badRequest().body(return_msg);
         }
         String newPassword = userService.createNewPassword(username);
-        return ResponseEntity.ok(newPassword);
+        return_msg.put("username", username);
+        return_msg.put("newPassword", newPassword);
+        return ResponseEntity.ok(return_msg);
     }
 
     @Operation(summary = "Get user information by username, require Admin role", tags = {"User"})
