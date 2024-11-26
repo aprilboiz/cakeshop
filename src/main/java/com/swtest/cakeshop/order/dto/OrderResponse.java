@@ -7,6 +7,8 @@ public record OrderResponse(
         String userId,
         String shippingAddress,
         String status,
+        String paymentMethod,
+        String createDate,
         List<OrderDetailResponse> orderDetails
 ) {
 }

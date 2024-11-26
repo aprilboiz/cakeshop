@@ -46,9 +46,11 @@ public class Order {
     public OrderResponse toDTO() {
         return new OrderResponse(
             this.id.toString(),
-            this.user.getId().toString(),
+            this.user.getUsername(),
             this.shippingAddress,
             this.status.toString(),
+            this.payment.toString(),
+            this.createdAt.toString(),
             this.orderDetails.stream()
                 .map(OrderDetail::toDTO)
                 .toList()
