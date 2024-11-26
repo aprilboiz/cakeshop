@@ -7,7 +7,9 @@ import com.swtest.cakeshop.role.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,6 +25,9 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String username;
+
+    @CreatedDate
+    private Instant createdAt;
 
     @Column(nullable = false)
     private String password;
@@ -52,6 +57,8 @@ public class User {
         return new UserResponse(
                 this.id.toString(),
                 this.username,
+                this.createdAt.toString(),
+                this.person.toDTO(),
                 this.roles.stream().map(Role::getName).toList()
         );
     }
