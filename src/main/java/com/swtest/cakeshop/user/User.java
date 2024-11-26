@@ -8,13 +8,16 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "users")
 public class User {
@@ -58,7 +61,7 @@ public class User {
                 this.id.toString(),
                 this.username,
                 this.createdAt.toString(),
-                this.person.toDTO(),
+                this.person == null ? Optional.empty() : Optional.of(this.person.toDTO()),
                 this.roles.stream().map(Role::getName).toList()
         );
     }
