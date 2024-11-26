@@ -44,7 +44,7 @@ public class OrderController {
 
     @Operation(summary = "Get all orders", tags = {"Order"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Get successfully", content = @Content(schema = @Schema(implementation = PagedModel.class, subTypes = OrderResponse.class))),
+            @ApiResponse(responseCode = "200", description = "Get successfully", content = @Content(schema = @Schema(implementation = OrderResponse.class))),
     })
     @GetMapping
     public ResponseEntity<Page<OrderResponse>> getOrders(Pageable pageable){
