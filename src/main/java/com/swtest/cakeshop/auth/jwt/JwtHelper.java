@@ -4,6 +4,7 @@ import com.swtest.cakeshop.exception.AccessDeniedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,11 +44,13 @@ public class JwtHelper {
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
-        }catch (SignatureException | ExpiredJwtException ex){
+        }catch (SignatureException | ExpiredJwtException | MalformedJwtException ex){
             if (ex instanceof ExpiredJwtException){
                 throw new AccessDeniedException("Access denied: Token expired");
-            }else {
+            }else if (ex instanceof SignatureException) {
                 throw new AccessDeniedException("Access denied: Invalid token type");
+            }else {
+                throw new AccessDeniedException("Access denied: Invalid token");
             }
         }
     }
