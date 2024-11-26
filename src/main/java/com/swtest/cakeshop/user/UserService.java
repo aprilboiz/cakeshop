@@ -2,10 +2,14 @@ package com.swtest.cakeshop.user;
 
 import com.swtest.cakeshop.auth.dto.RegisterRequest;
 import com.swtest.cakeshop.exception.DuplicateException;
+import com.swtest.cakeshop.user.dto.UserResponse;
 import com.swtest.cakeshop.user.person.Person;
 import com.swtest.cakeshop.user.person.PersonRepository;
 import com.swtest.cakeshop.role.Role;
 import com.swtest.cakeshop.role.RoleService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,10 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -27,11 +28,13 @@ public class UserService implements UserDetailsService {
     private final RoleService roleService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordService passwordService;
 
-    public UserService(PersonRepository personRepository, UserRepository userRepository, RoleService roleService) {
+    public UserService(PersonRepository personRepository, UserRepository userRepository, RoleService roleService, PasswordService passwordService) {
         this.personRepository = personRepository;
         this.userRepository = userRepository;
         this.roleService = roleService;
+        this.passwordService = passwordService;
     }
 
     @Override
@@ -56,6 +59,16 @@ public class UserService implements UserDetailsService {
 
     public List<User> findAll(){
         return userRepository.findAll();
+    }
+
+    public Page<UserResponse> findAll(Pageable pageable){
+        Page<User> users = userRepository.findAll(pageable);
+
+        List<UserResponse> userResponses = users.getContent().stream()
+                .map(User::toDTO)
+                .toList();
+
+        return new PageImpl<>(userResponses, pageable, users.getTotalElements());
     }
 
     public void register(RegisterRequest request){
@@ -87,5 +100,13 @@ public class UserService implements UserDetailsService {
     public User getCurrentUser() {
         String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         return findByUsername(currentUsername);
+    }
+
+    public String createNewPassword(String username){
+        User user = findByUsername(username);
+        String newPassword = passwordService.generatePassword(10);
+        user.setPassword(newPassword);
+        userRepository.save(user);
+        return newPassword;
     }
 }

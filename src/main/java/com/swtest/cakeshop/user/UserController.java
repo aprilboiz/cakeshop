@@ -1,5 +1,6 @@
 package com.swtest.cakeshop.user;
 
+import com.swtest.cakeshop.user.dto.UserResponse;
 import com.swtest.cakeshop.user.person.Person;
 import com.swtest.cakeshop.user.person.PersonService;
 import com.swtest.cakeshop.user.person.dto.PersonRequest;
@@ -9,9 +10,15 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -34,6 +41,38 @@ public class UserController {
     @GetMapping("/info")
     public ResponseEntity<PersonResponse> getUserInfo() {
         return ResponseEntity.ok(personService.findPersonByUser(userService.getCurrentUser()).toDTO());
+    }
+
+    @Operation(summary = "Get all users information", tags = {"User"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get successfully", content = @Content(schema = @Schema(implementation = UserResponse.class))),
+    })
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Page<UserResponse>> getAllUsers(Pageable pageable) {
+        PageRequest pageRequest = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                pageable.getSortOr(Sort.by(Sort.Direction.ASC, "id"))
+        );
+
+        Page<UserResponse> userResponses = userService.findAll(pageRequest);
+        return ResponseEntity.ok(userResponses);
+    }
+
+    @Operation(summary = "Re-create an user's password", tags = {"User"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Re-create password successfully"),
+            @ApiResponse(responseCode = "404", description = "The user with that username was not found")
+    })
+    @PostMapping("/forgot")
+    public ResponseEntity<String> forgetPassword(@RequestBody Map<String, String> payload) {
+        String username = payload.get("username");
+        if (username == null || username.isEmpty()) {
+            return ResponseEntity.badRequest().body("Username is required");
+        }
+        String newPassword = userService.createNewPassword(username);
+        return ResponseEntity.ok(newPassword);
     }
 
     @Operation(summary = "Get user information by username, require Admin role", tags = {"User"})

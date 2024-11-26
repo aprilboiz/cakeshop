@@ -1,6 +1,7 @@
 package com.swtest.cakeshop.user;
 
 import com.swtest.cakeshop.order.Order;
+import com.swtest.cakeshop.user.dto.UserResponse;
 import com.swtest.cakeshop.user.person.Person;
 import com.swtest.cakeshop.role.Role;
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -44,6 +46,14 @@ public class User {
         this.username = username;
         this.password = password;
         this.roles = roles;
+    }
+
+    public UserResponse toDTO(){
+        return new UserResponse(
+                this.id.toString(),
+                this.username,
+                this.roles.stream().map(Role::getName).toList()
+        );
     }
 
 }
