@@ -36,7 +36,7 @@ public class UserController {
 
     @Operation(summary = "Get current user information", tags = {"User"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User information found", content = @Content(schema = @Schema(implementation = PersonResponse.class))),
+            @ApiResponse(responseCode = "200", description = "User information found", content = @Content(schema = @Schema(implementation = UserResponse.class))),
             @ApiResponse(responseCode = "404", description = "User information not found", content = @Content)
     })
     @GetMapping("/info")
@@ -82,7 +82,7 @@ public class UserController {
 
     @Operation(summary = "Get user information by username, require Admin role", tags = {"User"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User information found", content = @Content(schema = @Schema(implementation = PersonResponse.class))),
+            @ApiResponse(responseCode = "200", description = "User information found", content = @Content(schema = @Schema(implementation = UserResponse.class))),
             @ApiResponse(responseCode = "404", description = "User information not found", content = @Content)
     })
     @GetMapping("/info/{username}")
