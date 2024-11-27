@@ -40,8 +40,8 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User information not found", content = @Content)
     })
     @GetMapping("/info")
-    public ResponseEntity<PersonResponse> getUserInfo() {
-        return ResponseEntity.ok(personService.findPersonByUser(userService.getCurrentUser()).toDTO());
+    public ResponseEntity<UserResponse> getUserInfo() {
+        return ResponseEntity.ok(userService.getCurrentUser().toDTO());
     }
 
     @Operation(summary = "Get all users information", tags = {"User"})
@@ -87,9 +87,8 @@ public class UserController {
     })
     @GetMapping("/info/{username}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<PersonResponse> getUserInfo(@PathVariable String username) {
-        User user = userService.findByUsername(username);
-        return ResponseEntity.ok(personService.findPersonByUser(user).toDTO());
+    public ResponseEntity<UserResponse> getUserInfo(@PathVariable String username) {
+        return ResponseEntity.ok(userService.findByUsername(username).toDTO());
     }
 
     @Operation(summary = "Update current user information", tags = {"User"})
