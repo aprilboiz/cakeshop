@@ -49,7 +49,7 @@ public class Order {
             this.user.getUsername(),
             this.shippingAddress,
             this.status.toString(),
-            this.payment.toString(),
+            this.payment.getMethod().toString(),
             this.createdAt.toString(),
             this.orderDetails.stream()
                 .map(OrderDetail::toDTO)
