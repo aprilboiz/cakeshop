@@ -44,7 +44,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getCurrentUser().toDTO());
     }
 
-    @Operation(summary = "Get all users information", tags = {"User"})
+    @Operation(summary = "Get all users information, require ADMIN", tags = {"User"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Get successfully", content = @Content(schema = @Schema(implementation = UserResponse.class))),
     })
@@ -80,7 +80,7 @@ public class UserController {
         return ResponseEntity.ok(return_msg);
     }
 
-    @Operation(summary = "Get user information by username, require Admin role", tags = {"User"})
+    @Operation(summary = "Get user information by username, require ADMIN", tags = {"User"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User information found", content = @Content(schema = @Schema(implementation = UserResponse.class))),
             @ApiResponse(responseCode = "404", description = "User information not found", content = @Content)
