@@ -1,9 +1,7 @@
 package com.swtest.cakeshop.order;
 
 import com.swtest.cakeshop.exception.NotFoundException;
-import com.swtest.cakeshop.order.dto.OrderDetailRequest;
-import com.swtest.cakeshop.order.dto.OrderRequest;
-import com.swtest.cakeshop.order.dto.OrderResponse;
+import com.swtest.cakeshop.order.dto.*;
 import com.swtest.cakeshop.payment.Payment;
 import com.swtest.cakeshop.payment.PaymentMethod;
 import com.swtest.cakeshop.payment.PaymentRepository;
@@ -17,8 +15,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService{
@@ -146,11 +146,19 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public void updateOrderStatus(Long orderId, String status) {
-        Order order = orderRepository.findByIdAndUser(orderId, userService.getCurrentUser())
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Order with id %d not found", orderId)));
+    public void updateOrderStatus(OrderStatusRequest request) {
+        Order order = orderRepository.findById(request.orderId())
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Order with id %d not found", request.orderId())));
 
-        order.setStatus(OrderStatus.valueOf(status));
+        order.setStatus(OrderStatus.valueOf(request.status()));
         orderRepository.save(order);
+    }
+
+    @Override
+    public OrderStatusResponse getAllOrderStatus(){
+        List<String> orderStatuses = Arrays.stream(OrderStatus.values())
+                .map(Enum::name)
+                .toList();
+        return new OrderStatusResponse(orderStatuses);
     }
 }
