@@ -1,23 +1,17 @@
-FROM openjdk:21
-LABEL author="Tuan Anh Phan"
-EXPOSE 8080
-RUN microdnf install findutils wget unzip
-
-# Install Gradle
-RUN wget -q https://services.gradle.org/distributions/gradle-8.11-bin.zip \
-    && unzip gradle-8.11-bin.zip -d /opt \
-    && rm gradle-8.11-bin.zip
-
-ENV GRADLE_HOME /opt/gradle-8.11
-ENV PATH $PATH:/opt/gradle-8.11/bin
-
+FROM gradle AS build
 
 WORKDIR /app
-COPY src /app/src
+
 COPY build.gradle /app
-COPY gradlew /app
 COPY settings.gradle /app
+COPY src /app/src
 
+RUN gradle clean build --no-daemon -x test
 
-# RUN gradle --no-daemon build
-CMD [ "gradle", "--no-daemon", "bootRun" ]
+FROM openjdk:21 AS runtime
+
+WORKDIR /app
+
+COPY --from=build /app/build/libs/cake-shop-0.0.1-SNAPSHOT.jar /app.jar
+
+ENTRYPOINT ["java", "-jar", "/app.jar"]
