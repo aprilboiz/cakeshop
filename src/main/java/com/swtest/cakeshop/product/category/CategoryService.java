@@ -3,9 +3,12 @@ package com.swtest.cakeshop.product.category;
 import com.swtest.cakeshop.exception.DuplicateException;
 import com.swtest.cakeshop.exception.NotFoundException;
 import com.swtest.cakeshop.product.category.dto.CategoryRequest;
+import com.swtest.cakeshop.product.category.dto.CategoryResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -29,5 +32,11 @@ public class CategoryService {
         return categoryRepository
                 .findByNameIgnoreCase(name)
                 .orElseThrow(() -> new NotFoundException(String.format("Category '%s' is not found", name)));
+    }
+
+    public CategoryResponse getAllCategories(){
+        List<Category> categories = this.categoryRepository.findAll();
+        List<String> categoriesNames = categories.stream().map(Category::getName).toList();
+        return new CategoryResponse(categoriesNames);
     }
 }

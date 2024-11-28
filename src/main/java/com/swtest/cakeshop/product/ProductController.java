@@ -1,5 +1,8 @@
 package com.swtest.cakeshop.product;
 
+import com.swtest.cakeshop.product.category.CategoryService;
+import com.swtest.cakeshop.product.category.dto.CategoryRequest;
+import com.swtest.cakeshop.product.category.dto.CategoryResponse;
 import com.swtest.cakeshop.product.dto.ProductRequest;
 import com.swtest.cakeshop.product.dto.ProductResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,9 +28,11 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping("/api/products")
 public class ProductController {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService){
+    public ProductController(ProductService productService, CategoryService categoryService){
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @Operation(summary = "Create a new product", tags = {"Product"})
@@ -75,7 +80,7 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
-    @Operation(summary = "Delete a product by id", tags = {"Product"})
+    @Operation(summary = "Delete a product by id, require ADMIN", tags = {"Product"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Product deleted"),
             @ApiResponse(responseCode = "404", description = "Product not found")
@@ -87,7 +92,7 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Update or create a product", tags = {"Product"})
+    @Operation(summary = "Update or create a product, require ADMIN", tags = {"Product"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Product updated"),
             @ApiResponse(responseCode = "500", description = "Error saving product")
@@ -103,5 +108,23 @@ public class ProductController {
         }
     }
 
+    @Operation(summary = "Create a new category, require ADMIN", tags = {"Product"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Category created"),
+            @ApiResponse(responseCode = "409", description = "Category already exists")
+    })
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/categories")
+    public ResponseEntity<Void> createCategory(@Valid @RequestBody CategoryRequest request){
+        categoryService.createCategory(request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 
+    @Operation(summary = "Get all the categories, require ADMIN", tags = {"Product"})
+    @ApiResponse(responseCode = "200", description = "Get successfully")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/categories")
+    public ResponseEntity<CategoryResponse> getAllCategories(){
+        return ResponseEntity.ok(categoryService.getAllCategories());
+    }
 }
