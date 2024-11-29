@@ -120,9 +120,8 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "Get all the categories, require ADMIN", tags = {"Product"})
+    @Operation(summary = "Get all the categories", tags = {"Product"})
     @ApiResponse(responseCode = "200", description = "Get successfully")
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/categories")
     public ResponseEntity<CategoryResponse> getAllCategories(){
         return ResponseEntity.ok(categoryService.getAllCategories());
