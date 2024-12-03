@@ -1,5 +1,6 @@
 package com.swtest.cakeshop.user;
 
+import com.swtest.cakeshop.user.dto.UserDeleteRequest;
 import com.swtest.cakeshop.user.dto.UserResponse;
 import com.swtest.cakeshop.user.person.Person;
 import com.swtest.cakeshop.user.person.PersonService;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -108,9 +110,15 @@ public class UserController {
             @ApiResponse(responseCode = "204", description = "Delete user successfully", content = @Content)
     })
     @DeleteMapping
-    public ResponseEntity<Void> deleteUserInfo() {
+    public ResponseEntity<Void> deleteUserInfo(@RequestBody @Valid UserDeleteRequest request) {
         User currentUser = userService.getCurrentUser();
-        userRepository.delete(currentUser);
+        User userToBeDeleted;
+        if (currentUser.getRoles().stream().anyMatch(role -> role.getName().equals("ADMIN"))){
+            userToBeDeleted = userService.findByUsername(request.username());
+        }else{
+            userToBeDeleted = currentUser;
+        }
+        userRepository.delete(userToBeDeleted);
         return ResponseEntity.noContent().build();
     }
 }
