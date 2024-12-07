@@ -46,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
         for (MultipartFile image : request.images()){
             imagePaths.add(cloudinaryService.uploadFile(image, "images"));
         }
-        Product product = new Product(productName, request.price(), productCategory, imagePaths);
+        Product product = new Product(productName, request.price(), request.quantity(), productCategory, imagePaths);
         return productRepository.save(product).toDTO();
     }
 
@@ -78,6 +78,7 @@ public class ProductServiceImpl implements ProductService {
         }
         product.setName(request.name());
         product.setPrice(request.price());
+        product.setQuantity(request.quantity());
         product.setCategory(productCategory);
         product.setImages(imagePaths);
         return productRepository.save(product).toDTO();

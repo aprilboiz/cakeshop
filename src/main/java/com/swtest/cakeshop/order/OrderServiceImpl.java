@@ -1,5 +1,6 @@
 package com.swtest.cakeshop.order;
 
+import com.swtest.cakeshop.exception.NotEnoughProduct;
 import com.swtest.cakeshop.exception.NotFoundException;
 import com.swtest.cakeshop.order.dto.*;
 import com.swtest.cakeshop.payment.Payment;
@@ -51,6 +52,10 @@ public class OrderServiceImpl implements OrderService{
                     Product product = productRepository
                             .findById(productId)
                             .orElseThrow(() -> new NotFoundException(String.format("Product with id %d not found", productId)));
+
+                    if (orderDetailRequest.quantity() > product.getQuantity()) {
+                        throw new NotEnoughProduct("The requested product is not enough product");
+                    }
 
                     OrderDetail orderDetail = new OrderDetail();
                     orderDetail.setProduct(product);

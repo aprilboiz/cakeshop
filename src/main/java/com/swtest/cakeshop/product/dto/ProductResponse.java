@@ -6,6 +6,7 @@ public record ProductResponse(
         Long id,
         String name,
         Double price,
+        Integer quantity,
         String category,
         List<String> images
 ) {

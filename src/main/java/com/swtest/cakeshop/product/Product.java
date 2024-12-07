@@ -21,6 +21,7 @@ public class Product {
 
     private String name;
     private Double price;
+    private Integer quantity;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -32,14 +33,15 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetails;
 
-    public Product(String name, Double price, Category category, List<String> images){
+    public Product(String name, Double price, Integer quantity, Category category, List<String> images){
         this.name = name;
         this.price = price;
+        this.quantity = quantity;
         this.category = category;
         this.images = images;
     }
 
     public ProductResponse toDTO(){
-        return new ProductResponse(id, name, price, category.getName(), images);
+        return new ProductResponse(id, name, price, quantity, category.getName(), images);
     }
 }

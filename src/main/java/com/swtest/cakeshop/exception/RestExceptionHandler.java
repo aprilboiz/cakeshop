@@ -1,6 +1,7 @@
 package com.swtest.cakeshop.exception;
 
 
+import com.cloudinary.Api;
 import com.swtest.cakeshop.exception.dto.ApiErrorResponse;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
@@ -99,5 +100,11 @@ public class RestExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException ex){
         ApiErrorResponse response = new ApiErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(NotEnoughProduct.class)
+    public ResponseEntity<ApiErrorResponse> handleNotEnoughProductException(NotEnoughProduct ex){
+        ApiErrorResponse response = new ApiErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }

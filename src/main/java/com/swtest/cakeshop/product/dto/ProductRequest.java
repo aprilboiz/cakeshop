@@ -16,6 +16,10 @@ public record ProductRequest(
         @Min(value = 0, message = "Product price must be greater than 0")
         Double price,
 
+        @NotNull(message = "Product quantity is required")
+        @Min(value = 0, message = "Product quantity must be greater than 0")
+        Integer quantity,
+
         @NotEmpty(message = "Product category is required")
         String category,
 
