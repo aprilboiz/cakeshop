@@ -8,10 +8,6 @@ import com.swtest.cakeshop.role.Role;
 import com.swtest.cakeshop.role.RoleRepository;
 import com.swtest.cakeshop.user.User;
 import com.swtest.cakeshop.user.UserRepository;
-import jakarta.annotation.PostConstruct;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

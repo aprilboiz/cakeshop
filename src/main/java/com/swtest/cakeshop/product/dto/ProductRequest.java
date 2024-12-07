@@ -1,6 +1,5 @@
 package com.swtest.cakeshop.product.dto;
 
-import com.swtest.cakeshop.product.category.Category;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

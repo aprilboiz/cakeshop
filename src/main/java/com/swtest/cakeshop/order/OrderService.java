@@ -3,9 +3,7 @@ package com.swtest.cakeshop.order;
 import com.swtest.cakeshop.order.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
 public interface OrderService {
     OrderResponse createOrder(OrderRequest orderRequest);

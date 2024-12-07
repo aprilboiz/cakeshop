@@ -10,12 +10,10 @@ import com.swtest.cakeshop.storage.CloudinaryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import java.util.*;

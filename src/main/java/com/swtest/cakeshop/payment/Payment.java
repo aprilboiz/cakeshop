@@ -1,6 +1,5 @@
 package com.swtest.cakeshop.payment;
 
-import com.swtest.cakeshop.order.Order;
 import com.swtest.cakeshop.payment.dto.PaymentDTO;
 import jakarta.persistence.*;
 import lombok.Data;

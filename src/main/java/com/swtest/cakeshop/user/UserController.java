@@ -5,7 +5,6 @@ import com.swtest.cakeshop.user.dto.UserResponse;
 import com.swtest.cakeshop.user.person.Person;
 import com.swtest.cakeshop.user.person.PersonService;
 import com.swtest.cakeshop.user.person.dto.PersonRequest;
-import com.swtest.cakeshop.user.person.dto.PersonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
