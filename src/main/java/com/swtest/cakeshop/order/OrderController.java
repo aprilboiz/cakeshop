@@ -1,5 +1,6 @@
 package com.swtest.cakeshop.order;
 
+import com.swtest.cakeshop.exception.InvalidActionException;
 import com.swtest.cakeshop.order.dto.OrderRequest;
 import com.swtest.cakeshop.order.dto.OrderResponse;
 import com.swtest.cakeshop.order.dto.OrderStatusRequest;
@@ -95,7 +96,7 @@ public class OrderController {
     })
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/status")
-    public ResponseEntity<Void> updateOrderStatus(@Valid @RequestBody OrderStatusRequest request){
+    public ResponseEntity<Void> updateOrderStatus(@Valid @RequestBody OrderStatusRequest request) throws InvalidActionException {
         orderService.updateOrderStatus(request);
         return ResponseEntity.noContent().build();
     }

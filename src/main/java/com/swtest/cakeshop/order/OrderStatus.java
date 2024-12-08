@@ -3,7 +3,7 @@ package com.swtest.cakeshop.order;
 public enum OrderStatus {
     NEW,
     PROCESSING,
-    SHIPPED,
+    SHIPPING,
     DELIVERED,
     CANCELLED
 }

@@ -1,5 +1,6 @@
 package com.swtest.cakeshop.order;
 
+import com.swtest.cakeshop.exception.InvalidActionException;
 import com.swtest.cakeshop.exception.NotEnoughProduct;
 import com.swtest.cakeshop.exception.NotFoundException;
 import com.swtest.cakeshop.order.dto.*;
@@ -44,7 +45,7 @@ public class OrderServiceImpl implements OrderService{
                 .mapToDouble(orderDetailRequest -> orderDetailRequest.price() * orderDetailRequest.quantity())
                 .sum());
         order.setShippingAddress(orderRequest.shippingAddress());
-        order.setStatus(OrderStatus.PROCESSING);
+        order.setStatus(OrderStatus.NEW);
 
         List<OrderDetail> orderDetails = orderRequest.orderDetails().stream()
                 .map(orderDetailRequest -> {
@@ -154,9 +155,26 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public void updateOrderStatus(OrderStatusRequest request) {
+    public void updateOrderStatus(OrderStatusRequest request) throws InvalidActionException {
         Order order = orderRepository.findById(request.orderId())
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Order with id %d not found", request.orderId())));
+        OrderStatus status = OrderStatus.valueOf(request.status());
+        switch (status) {
+            case DELIVERED:
+                if (order.getPayment().getStatus() != PaymentStatus.PAID) {
+                    throw new InvalidActionException("This action cannot be done since payment status is not PAID");
+                }
+                break;
+            case CANCELLED:
+                order.getOrderDetails().forEach((detail) -> {
+                    Product product = productRepository.getReferenceById(detail.getId());
+                    product.setQuantity(product.getQuantity() + detail.getQuantity());
+                    productRepository.save(product);
+                });
+                break;
+            default:
+                break;
+        }
 
         order.setStatus(OrderStatus.valueOf(request.status()));
         orderRepository.save(order);
