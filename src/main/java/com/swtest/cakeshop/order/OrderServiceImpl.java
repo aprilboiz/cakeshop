@@ -48,20 +48,24 @@ public class OrderServiceImpl implements OrderService{
 
         List<OrderDetail> orderDetails = orderRequest.orderDetails().stream()
                 .map(orderDetailRequest -> {
-                    Long productId = Long.valueOf(orderDetailRequest.productId());
+                    Long requestProductId = Long.valueOf(orderDetailRequest.productId());
+                    Integer requestProductQuantity = Integer.valueOf(orderDetailRequest.quantity());
                     Product product = productRepository
-                            .findById(productId)
-                            .orElseThrow(() -> new NotFoundException(String.format("Product with id %d not found", productId)));
+                            .findById(requestProductId)
+                            .orElseThrow(() -> new NotFoundException(String.format("Product with id %d not found", requestProductId)));
 
-                    if (orderDetailRequest.quantity() > product.getQuantity()) {
+                    if (requestProductQuantity > product.getQuantity()) {
                         throw new NotEnoughProduct("The requested product is not enough product");
                     }
 
                     OrderDetail orderDetail = new OrderDetail();
                     orderDetail.setProduct(product);
-                    orderDetail.setQuantity(orderDetailRequest.quantity());
+                    orderDetail.setQuantity(requestProductQuantity);
                     orderDetail.setPrice(orderDetailRequest.price());
                     orderDetail.setOrder(order);
+
+                    product.setQuantity(product.getQuantity() - requestProductQuantity);
+                    productRepository.save(product);
                     return orderDetail;
                 })
                 .toList();
