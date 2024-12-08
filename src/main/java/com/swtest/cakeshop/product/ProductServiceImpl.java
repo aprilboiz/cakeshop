@@ -95,4 +95,11 @@ public class ProductServiceImpl implements ProductService {
 
         return new PageImpl<>(responses, pageRequest, products.getTotalElements());
     }
+
+    @Override
+    public void updateProductQuantity(Long id, Integer newQuantity) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("The product with id %d not found.", id)));
+        product.setQuantity(newQuantity);
+        productRepository.save(product);
+    }
 }

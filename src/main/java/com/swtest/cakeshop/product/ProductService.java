@@ -13,4 +13,5 @@ public interface ProductService {
     void deleteProductById(Long id);
     ProductResponse updateProduct(Long id, ProductRequest request) throws IOException;
     Page<ProductResponse> getProducts(PageRequest pageRequest);
+    void updateProductQuantity(Long id, Integer newQuantity);
 }
