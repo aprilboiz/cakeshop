@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -19,8 +20,8 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @CreatedDate
-    private Instant paidAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date paidAt;
 
     private Double amount;
 
@@ -30,10 +31,9 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentMethod method;
 
-    public PaymentDTO toDTO(){
+    public PaymentDTO toDTO() {
         return new PaymentDTO(
-            this.status.toString(),
-            this.method.toString()
-        );
+                this.status.toString(),
+                this.method.toString());
     }
 }
