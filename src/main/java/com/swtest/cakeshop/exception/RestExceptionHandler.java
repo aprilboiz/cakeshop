@@ -1,7 +1,6 @@
 package com.swtest.cakeshop.exception;
 
 
-import com.cloudinary.Api;
 import com.swtest.cakeshop.exception.dto.ApiErrorResponse;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
@@ -104,6 +103,12 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(NotEnoughProduct.class)
     public ResponseEntity<ApiErrorResponse> handleNotEnoughProductException(NotEnoughProduct ex){
+        ApiErrorResponse response = new ApiErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(InvalidActionException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidActionException(InvalidActionException ex){
         ApiErrorResponse response = new ApiErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
