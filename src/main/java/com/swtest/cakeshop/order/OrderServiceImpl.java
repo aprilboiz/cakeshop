@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService{
         List<OrderDetail> orderDetails = orderRequest.orderDetails().stream()
                 .map(orderDetailRequest -> {
                     Long requestProductId = Long.valueOf(orderDetailRequest.productId());
-                    Integer requestProductQuantity = Integer.valueOf(orderDetailRequest.quantity());
+                    Integer requestProductQuantity = orderDetailRequest.quantity();
                     Product product = productRepository
                             .findById(requestProductId)
                             .orElseThrow(() -> new NotFoundException(String.format("Product with id %d not found", requestProductId)));
@@ -167,16 +167,17 @@ public class OrderServiceImpl implements OrderService{
                 break;
             case CANCELLED:
                 order.getOrderDetails().forEach((detail) -> {
-                    Product product = productRepository.getReferenceById(detail.getId());
+                    Product product = productRepository.findById(detail.getId()).orElseThrow(() -> new NotFoundException("Not found the product associate with this order id"));
                     product.setQuantity(product.getQuantity() + detail.getQuantity());
                     productRepository.save(product);
                 });
+                order.getPayment().setStatus(PaymentStatus.FAILED);
                 break;
             default:
                 break;
         }
 
-        order.setStatus(OrderStatus.valueOf(request.status()));
+        order.setStatus(status);
         orderRepository.save(order);
     }
 
