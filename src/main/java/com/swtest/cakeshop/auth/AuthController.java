@@ -22,16 +22,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    private final AuthenticationManager authenticationManager;
-    private final JwtHelper jwtHelper;
+    private final AuthService authService;
     private final UserService userService;
 
-    public AuthController(AuthenticationManager authenticationManager,
-                          UserService userService,
-                          JwtHelper jwtHelper) {
-        this.authenticationManager = authenticationManager;
+    public AuthController(UserService userService, AuthService authService) {
+        this.authService = authService;
         this.userService = userService;
-        this.jwtHelper = jwtHelper;
+
     }
 
     @Operation(summary = "Register a new user", tags = {"Auth"})
@@ -53,13 +50,7 @@ public class AuthController {
     })
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                request.username(),
-                request.password()
-        );
-
-        Authentication auth = authenticationManager.authenticate(authToken);
-        String token = jwtHelper.generateToken((UserDetails) auth.getPrincipal());
-        return ResponseEntity.ok(new LoginResponse(token));
+        LoginResponse response = authService.login(request);
+        return ResponseEntity.ok(response);
     }
 }
