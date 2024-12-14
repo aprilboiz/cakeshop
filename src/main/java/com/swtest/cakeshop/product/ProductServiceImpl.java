@@ -63,7 +63,8 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Product with id %s is not exists", id)));
-        productRepository.deleteById(product.getId());
+        product.setQuantity(0);
+        productRepository.save(product);
     }
 
     @Override
