@@ -1,6 +1,7 @@
 package com.swtest.cakeshop.user;
 
 import com.swtest.cakeshop.auth.AuthController;
+import com.swtest.cakeshop.auth.AuthServiceImpl;
 import com.swtest.cakeshop.auth.dto.LoginRequest;
 import com.swtest.cakeshop.auth.dto.LoginResponse;
 import com.swtest.cakeshop.auth.jwt.JwtHelper;
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+class UserUnitTests {
     @Mock
     private AuthenticationManager authenticationManager;
 
@@ -33,10 +34,13 @@ class UserServiceTest {
     private JwtHelper jwtHelper;
 
     @Mock
-    private UserService userService;
+    Authentication auth;
+
+    @Mock
+    UserDetails userDetails;
 
     @InjectMocks
-    private AuthController authController;
+    private AuthServiceImpl authService;
 
     @BeforeEach
     void setUp() {
@@ -46,17 +50,14 @@ class UserServiceTest {
     @Test
     void login_ValidCredentials_ReturnsToken() {
         LoginRequest request = new LoginRequest("validUser", "validPassword");
-        Authentication auth = mock(Authentication.class);
-        UserDetails userDetails = mock(UserDetails.class);
 
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(auth);
         when(auth.getPrincipal()).thenReturn(userDetails);
         when(jwtHelper.generateToken(userDetails)).thenReturn("validToken");
 
-        ResponseEntity<LoginResponse> response = authController.login(request);
+        LoginResponse response = authService.login(request);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("validToken", response.getBody().token());
+        assertEquals("validToken", response.token());
     }
 
     @Test
@@ -66,7 +67,6 @@ class UserServiceTest {
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenThrow(new BadCredentialsException("Invalid credentials"));
 
-        assertThrows(BadCredentialsException.class, () -> authController.login(request));
+        assertThrows(BadCredentialsException.class, () -> authService.login(request));
     }
-
 }
